@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>#{get 'title' /}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/main.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/themes/default/easyui.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/themes/icon.css'}">
+<script type="text/javascript" src="@{'/public/javascripts/jquery-1.6.min.js'}"></script>
+<script type="text/javascript" src="@{'/public/javascripts/jquery.easyui.min.js'}"></script>
+<script type="text/javascript" src="@{'/public/javascripts/commons.js'}"></script>
+#{get 'moreStyles' /}
+<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+#{get 'moreScripts' /}
+</head>
+<body style="margin:4px;overflow-x: hidden;overflow-y: hidden">
+<div class="easyui-layout" style="height:100%">
+#{doLayout /}
+</div>
+</body>
+</html>
