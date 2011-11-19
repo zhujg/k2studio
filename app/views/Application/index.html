@@ -1,50 +1,35 @@
 #{extends 'main.html' /}
 #{set title:'K2Studio' /}
-
 #{set 'moreScripts'}
 <script>
-	function addtab(title,url){
-		if ($('#tt').tabs('exists', title)){
-			$('#tt').tabs('select', title);
-		} else {
-			var content = '<iframe scrolling="auto" frameborder="0" src="'+url+'" style="width:100%;height:100%;"></iframe>';
-			$('#tt').tabs('add',{
-				title:title,
-				content:content,
-				closable:true
-			});
-		}
-	}
+	var _menus = ${menus.raw()};
 </script>
 #{/set}
+<div region="north" split="true" border="false" style="overflow: hidden; height: 50px; background: url(../public/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%; line-height: 40px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
+<span style="float:right; padding-right:20px;" class="head">欢迎 ${session.username} <a href="#" id="editpass">修改密码</a> <a href="@{Secure.logout()}" id="loginOut">安全退出</a></span>
+<span style="padding-left:10px; font-size: 16px; "><img src="../public/images/blocks.gif" width="20" height="20" align="absmiddle" /> #{config.show 'SYS_COMPANY_NAME'/}</span>
+</div>
 
-<div region="north" border="false" style="height:40px;background:#B3DFDA;">头</div>
-<div region="center" title="K2系统开发平台">		
-	<div id="tt" class="easyui-tabs" fit="true" border="false">
-		<div title="我的工作台" style="padding-left:10px;overflow:hidden;">这是我的桌面</div>
-	</div>
+<div region="south" split="true" style="height: 30px; background: #D2E0F2; ">
+<div class="footer">By 疯狂秀才(QQ:1055818239) jQuery.Easy-UI QQ讨论群： 112044258、32994605、36534121、56271061</div>
 </div>
-	
-<div region="west" split="true" title="功能导航" style="width:200px;">
-	<div class="easyui-accordion" fit="true" border="false">
-		<div title="系统管理" icon="icon-ok" style="overflow:auto;padding-top:5px;">
-			<ul class="easyui-tree">
-				<li><span>权限管理</span>
-					<ul>
-						<li iconCls="icon-save"><span><a href="#" onclick="addtab('组织机构管理','/Menus/index')">组织机构管理</a></span></li>
-						<li><span>角色管理与授权</span></li>
-						<li><span>人员管理与授权</span></li>
-						<li><span><a href="#" onclick="addtab('菜单资源管理','/Menus/index');return false;">菜单资源管理</span></li>
-					</ul>
-				</li>
-				<li><span>基础数据维护</span>
-					<ul>
-						<li><span>字典维护</span></li>
-						<li><span>全局参数表维护</span></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
+
+<div region="west" hide="true" split="true" title="#{config.show 'WEST_NAVIGATE_TITLE'/}" style="width:180px;" id="west">
+<div id="nav" class="easyui-accordion" fit="true" border="false"></div>
 </div>
-<div region="south" border="false" style="height:20px;background:#A9FACD;padding:3px"> 欢迎您,开发人员! 帐户:EDD 所属部门:开发部</div>
+
+<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
+<div id="tabs" class="easyui-tabs"  fit="true" border="false">
+<div title="#{config.show 'WELCOME_PAGE_TITLE'/}" style="padding:20px;overflow:hidden; color:red;"></div>
+</div>
+</div>
+    
+<div id="mm" class="easyui-menu" style="width:150px;">
+<div id="mm-tabupdate">刷新</div>
+<div class="menu-sep"></div>
+<div id="mm-tabclose">关闭</div>
+<div id="mm-tabcloseall">全部关闭</div>
+<div id="mm-tabcloseother">除此之外全部关闭</div>
+<div class="menu-sep"></div>
+<div id="mm-exit">退出</div>
+</div>

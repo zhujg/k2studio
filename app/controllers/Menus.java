@@ -1,11 +1,14 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.Menu;
+import models.Role;
+import models.User;
+import utils.MyUtils;
+import utils.Page;
+import utils.TreeUtils;
 
 public class Menus extends Application{
 
@@ -13,62 +16,40 @@ public class Menus extends Application{
 		render();
 	}
 	
-	public static void getTree(){
-		List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
-		
-		Map<String,Object> root = new HashMap<String,Object>();
-		root.put("id", 0);
-		root.put("text","K2Studio系统集成与开发平台");
-		nodes.add(root);
-		
-		List<Menu> list = Menu.find("pid=0").fetch();
-		List<Map<String,Object>> nodes1 = new ArrayList<Map<String,Object>>();
-		for(Menu menu : list){
-			Map<String,Object> node = new HashMap<String,Object>();
-			node.put("id", menu.id);
-			node.put("text", menu.name);
-			nodes1.add(node);
+	public static void getTree(Long rid,Long uid){
+		String nodes = null;
+		if(rid!=null){ 
+			Role role = Role.findById(rid);
+			if(role!=null) nodes = role.nodes;
 		}
-		
-		root.put("children", nodes1.toArray(new Object[nodes1.size()]));
-		
-		List<Map<String,Object>> doing = new ArrayList<Map<String,Object>>();
-		doing.addAll(nodes1);
-		
-		while(!doing.isEmpty()){
-			List<Map<String,Object>> todo = new ArrayList<Map<String,Object>>();
-			for(Map<String,Object> item: doing){
-				list = Menu.find("pid",item.get("id")).fetch();
-				if(list.isEmpty()) continue;
-				
-				List<Object> children = new ArrayList<Object>();
-				for(Menu menu : list){
-					Map<String,Object> node = new HashMap<String,Object>();
-					node.put("id", menu.id);
-					node.put("text", menu.name);
-					children.add(node);
-					todo.add(node);
-				}
-				item.put("children", children.toArray(new Object[children.size()]));
-			}
-			doing = todo;
+		if(uid!=null){
+			User user = User.findById(uid);
+			if(user!=null) nodes = user.menu;
 		}
-		
-
-		renderJSON(nodes);
+		TreeUtils tree = new TreeUtils(Menu.class,"sort",nodes);
+		renderJSON(tree.getTree());
 	}
 	
-	public static void getItems(Long pid){
-		Map<String,Object> result = new HashMap<String,Object>();
-		List<Menu> list = null;
-		if(pid == null) list = Menu.findAll();
-		else list = Menu.find("pid=?",pid).fetch();
-		result.put("total", list.size());
-		result.put("rows", list);
-		renderJSON(result);
+	public static void getItems(Long pid,String q){
+		List<Object> args = new ArrayList<Object>();
+		String sql = "1=1 ";
+		if(pid != null){
+			sql = sql + "and pid = ? ";
+			args.add(pid);
+		}
+		if(!MyUtils.isEmpty(q)){
+			sql = sql + "and name like ? ";
+			args.add("%" + q + "%");
+		}
+		long total = Menu.count(sql, args.toArray());
+		List rows = Menu.find(sql + "order by sort",args.toArray()).fetch(getPage(),getRows());
+		Page page = new Page(total,rows);
+		renderJSON(page.get());
 	}
 	
-	public static void save(Menu menu){
+	public static void save(){
+		Menu menu = new Menu();
+		menu.edit("", params.all());
 		menu.save();
 		renderJSON(menu);
 	}
@@ -76,6 +57,13 @@ public class Menus extends Application{
 	public static void delete(Long id){
 		Menu menu = Menu.findById(id);
 		if(menu!=null) menu.delete();
+		renderJSON(menu);
+	}
+	
+	public static void update(Long id){
+		Menu menu = Menu.findById(id);
+		menu.edit("", params.all());
+		menu.save();
 		renderJSON(menu);
 	}
 }

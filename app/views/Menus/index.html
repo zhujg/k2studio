@@ -8,46 +8,27 @@ $(function(){
 			normalQuery();
 		}
 	});
-	
-	$('#list').datagrid({
-		nowrap: false,
-		striped: true,
-		collapsible:true,
-		singleSelect:true,
-		url:'@{getItems()}',
-		sortName: 'code',
-		sortOrder: 'desc',
-		remoteSort: false,
-		idField:'id',
-		columns:[[
-			{field:'name',title:'菜单名称',width:120},
-			{field:'url',title:'请求路径',width:250},
-			{field:'pid',title:'上级菜单',width:100},
-			{field:'sort',title:'排序号',width:80},
-			{field:'icon',title:'节点图片CSS类名',width:100}
-		]],
-		pagination:true,
-		rownumbers:true,
-		toolbar:[
-			{id:'btnadd',text:'新增',iconCls:'icon-add',handler:function(){newItem();}},
-		    {id:'btnedit',text:'修改',iconCls:'icon-edit'},
-		    {id:'btndel',text:'删除',iconCls:'icon-remove',handler:function(){delItem();}}
-		]
-	})
 });
 
-function normalQuery(value){
+function normalQuery(){
+	var value = $("#keyword").val();
 	var node = $('#t-menus').tree('getSelected');
 	$('#list').datagrid('load',{
-		pid: (node?node.id:0),
+		pid: (node?node.id:''),
 		q: value
 	});
 }
 
 var url;
+var reload;
 function newItem(){
 	$('#dlg').dialog('setTitle','新增菜单').dialog('open');
 	$('#myform').form('clear');
+	if(reload) $('#pid').combotree('reload');
+	var node = $('#t-menus').tree('getSelected');
+	if (node){
+		$('#pid').combotree('setValue',node.id);
+	}
 	url = "@{save()}";
 }
 
@@ -56,6 +37,7 @@ function saveItem(){
 		url:url,
 		onSubmit:function(){return $(this).form('validate');},
 		success:function(){
+			reload = true;
 			$('#dlg').dialog('close');
 			$('#list').datagrid('reload');
 			$('#t-menus').tree('reload');
@@ -63,14 +45,30 @@ function saveItem(){
 	});
 }
 
+function editItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$('#dlg').dialog('setTitle','修改菜单').dialog('open');
+		$('#myform').form('load',row);
+		url = '@{update()}?id=' + row.id;
+	} else {
+		$.messager.show({
+			title:'提示',
+			msg:'请先选择菜单，再进行修改。'
+		});
+	}
+}
+
 function delItem(){
 	var row = $('#list').datagrid('getSelected');
 	if (row){
-		$.messager.confirm({
-			title: "请确认",
-			msg: "您真的要删除该数据?",
-			fn:function(){
-				alert(1);
+		$.messager.confirm("删除确认","是否真的删除该项记录？",function(r){
+			if(r){
+				var index = $('#list').datagrid('getRowIndex', row);
+				$.post("@{delete()}", {id:row.id}, function(){
+					$('#list').datagrid('deleteRow', index);
+					$('#t-menus').tree('reload');
+				});
 			}
 		});
 		return;
@@ -85,10 +83,32 @@ function delItem(){
 </div>
 		
 <div region="center" title="菜单信息表" style="padding:5px;">
-<table id="list" fit="true"></table>
+<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb">
+<thead>
+<tr>
+<th field="name" width="150">菜单名称</th>
+<th field="url" width="250">请求路径</th>
+<th field="sort" width="80">排序号</th>
+<th field="icon" width="120">节点图片CSS类名</th>
+</tr>
+</thead>
+</table>
 </div>
 
-<div id="dlg" class="easyui-dialog" style="width:320px;height:250px;" closed="true" modal="true" buttons="#dlg-buttons">
+
+<div id="tb">  
+    <span style="float: left;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:newItem();">新增</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="javascript:editItem();">修改</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a> 
+    </span>
+    <span style="float:right">
+    <input type="text" size="20" id="keyword"/>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a> 
+    </span> 
+</div> 
+
+<div id="dlg" class="easyui-dialog" style="width:320px;height:230px;" closed="true" modal="true" buttons="#dlg-buttons">
 <form id="myform" method="post">
 #{include 'Menus/_form.html'/}
 </form>

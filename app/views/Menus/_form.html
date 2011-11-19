@@ -1,24 +1,24 @@
-<div style="padding:20px">
+<div style="padding:10px">
 <table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
 		<td style="width:80px">菜单名称：</td>
-		<td><input name="menu.name" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+		<td><input name="name" id="name" style="width:200px" class="easyui-validatebox" required="true"></input></td>
 	</tr>
 	<tr>
 		<td style="width:80px">上级菜单：</td>
-		<td><input name="menu.pid" style="width:200px" class="easyui-combotree" url="@{getTree()}" required="true"></input></td>
+		<td><input name="pid" id="pid" style="width:200px" class="easyui-combotree" url="@{getTree()}" required="true"></input></td>
 	</tr>
 	<tr>
 		<td style="width:80px">请求地址：</td>
-		<td><input name="menu.url" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+		<td><input name="url" id="url" style="width:200px" class="easyui-validatebox" required="true"></input></td>
 	</tr>
 	<tr>
-		<td style="width:80px">图片CSS类</td>
-		<td><input name="menu.icon" style="width:200px"></input></td>
+		<td style="width:80px">图片CSS类：</td>
+		<td><input name="icon" id="icon" style="width:200px"></input></td>
 	</tr>
 	<tr>
-		<td style="width:80px">排序号</td>
-		<td><input name="menu.sort" style="width:200px"></input></td>
+		<td style="width:80px">排序号：</td>
+		<td><input name="sort" id="sort" style="width:200px" class="easyui-numberspinner"></input></td>
 	</tr>
 </table>
 </div>

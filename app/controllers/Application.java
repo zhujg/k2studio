@@ -1,16 +1,29 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.*;
+import models.Menu;
+import play.mvc.Controller;
+import play.mvc.With;
+import utils.Page;
 
-import models.*;
-
+@With(Secure.class)
 public class Application extends Controller {
 
     public static void index() {
-        render();
+    	String menus = Menu.loadMenus();
+        render(menus);
+    }
+    
+    public static int getPage(){
+    	int page = params.get("page",Integer.class);
+    	return page == 0 ? 1 : page;
+    }
+    
+    public static int getRows(){
+    	int rows = params.get("rows",Integer.class);
+    	return rows == 0 ? 10 : rows;
     }
 
 }

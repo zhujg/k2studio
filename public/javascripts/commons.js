@@ -42,3 +42,46 @@ function showQueryDialog(options){
 	}
 	dlg.dialog('open');
 }
+
+function showDialog(options){
+	var opts = options || {};
+	var dlg = $('#dlg-win');
+	if (!dlg.length){
+		dlg = $('<div id="dlg-query"></div>').appendTo('body');
+		dlg.dialog({
+			title:opts.title||'新建窗口',
+			width:opts.width||400,
+			height:opts.height||300,
+			closed:true,
+			modal:true,
+			href:opts.href,
+			buttons:[{
+				text:'关闭',
+				iconCls:'icon-cancel',
+				handler:function(){dlg.dialog('close');}
+			}]
+		});
+	}
+	dlg.dialog('open');
+}
+
+function getTreeValue($obj){
+	var cnodes='';  
+    var pnodes='';
+	var nodes = $obj.find(".tree-checkbox2");
+	$(nodes).each(function(i){
+		var node = $(this).parent().attr("node-id");
+		if(node > 0) pnodes+=node+',';
+	});
+	nodes = $obj.find(".tree-checkbox1");
+	$(nodes).each(function(i){
+		var node = $(this).parent().attr("node-id");
+		if(node > 0) cnodes+=node+',';
+	});
+    cnodes = cnodes.substring(0,cnodes.length-1);  
+    pnodes = pnodes.substring(0,pnodes.length-1);
+    nodes = pnodes;
+    if(nodes.length > 0) nodes = nodes + "," + cnodes;
+    else nodes = cnodes;
+    return nodes;
+}
