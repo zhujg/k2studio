@@ -1,0 +1,61 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+	var edg;
+	$(function(){
+		edg = $('#list').edatagrid({
+			url:'@{getItems()}',
+			saveUrl:'@{save()}',
+			updateUrl:'@{update()}',
+			destroyUrl:'@{delete()}'
+		});
+	});
+	
+	function normalQuery(){
+		var value = $("#keyword").val();
+		edg.edatagrid('reload',{
+			q: value
+		});
+	}
+	
+	function init(){
+		$.messager.confirm("请确认","要对参数表进行内存同步操作吗？",function(r){
+			if(r){
+				edg.edatagrid("loading");
+				$.getJSON("@{init()}",function(data){
+					edg.edatagrid("loaded");
+				});
+			}
+		})
+	}
+</script>
+#{/set}	
+<div region="center" title="全局参数表维护" style="padding:5px;">
+<table id="list" fit="true"  singleSelect="true" rownumbers="true" border="true" toolbar="#tb" pagination="true">
+<thead>
+<tr>
+<th field="key" width="150" editor="text">参数键名</th>
+<th field="value" width="200" editor="text">参数键值</th>
+<th field="note" width="200" editor="text">备注</th>
+</tr>
+</thead>
+</table>
+</div>
+
+<div id="tb"> 
+<span style="float:left;">
+	<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="edg.edatagrid('addRow')">新增</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="edg.edatagrid('saveRow')">保存</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="edg.edatagrid('cancelRow')">取消</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="edg.edatagrid('destroyRow')">删除</a>
+	<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="init();">同步</a> 提示:维护参数表后必须执行内存同步
+</span>
+<span style="float:right;">
+<input type="text" size="20" id="keyword"/>
+<a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a> 
+<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="edg.edatagrid('reload')">刷新</a>
+</span>
+</div>
+
+</div>

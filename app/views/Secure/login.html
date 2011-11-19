@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>#{config.show "SYS_TITLE"/}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/main.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/themes/default/easyui.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/themes/icon.css'}">
+<script type="text/javascript" src="@{'/public/javascripts/jquery-1.6.min.js'}"></script>
+<script type="text/javascript" src="@{'/public/javascripts/jquery.easyui.min.js'}"></script>
+<script type="text/javascript" src="@{'/public/javascripts/locale/easyui-lang-zh_CN.js'}"></script>
+<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+<style>
+#tools{text-align:right;height:41px;line-height:40px;padding-right:5px;background-color: #e0edff;border-top:1px solid #a7b9cf}
+</style>
+<script>
+$(function(){
+	$('#win').window({  
+    	width:465,  
+    	height:300,  
+    	modal:true,
+    	minimizable:false,
+    	maximizable:false,
+    	closable:false
+	});
+	#{if flash.error}
+		$.messager.alert('错误','&{flash.error}');
+	#{/if}
+	#{if flash.success}
+		$.messager.alert('信息','&{flash.success}');
+	#{/if}
+});
+</script>
+</head>
+<body style="margin:4px;overflow-x: hidden;overflow-y: hidden">
+<div id="win" title="#{config.show 'LOGIN_WINDOW_TITLE' /}">
+
+<div class="easyui-layout" fit="true">
+
+<div region="center" border="false" border="false">  
+<img src="/public/images/login_banner.png"/>
+<div id="tabs" class="easyui-tabs" border="false">
+<div title="身份认证" style="padding-top:10px;padding-left:35px;">
+#{form @authenticate(),id:'login'}
+<table>
+<tr><td height="20">帐号：</td><td><input type="text" name="username" size="50"/></td></tr>
+<tr><td height="20">密码：</td><td><input type="password" name="password" size="50"/></td></tr>
+<tr><td colspan="2" align="center"><a href="#" onclick="$('#tabs').tabs('select','信息公告');return false;">点击查看演示帐号</a></td></tr>
+</table>
+#{/form}
+</div>
+<div title="信息公告" style="padding:10px;line-height:20px;">
+登录帐户[用户名/密码]...<br/>
+[developer/111111]<br/>
+[super/111111]<br/>
+</div>
+<div title="关于" style="padding:10px;line-height:20px;">
+K2系统集成与应用开发平台 (K2Studio®)
+</div>
+</div>
+</div>
+<div region="south" border="false" id="tools">
+<a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="document.getElementById('login').submit();">登录</a>  
+<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="$('#login').clear();">清除</a>  
+</div> 
+</div>
+
+</div>
+</body>
+</html>

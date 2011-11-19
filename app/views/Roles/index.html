@@ -1,0 +1,161 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+$(function(){
+	$('#tree').tree({
+		onClick:function(){
+			normalQuery();
+		}
+	});
+});
+
+function normalQuery(){
+	var value = $("#keyword").val();
+	var node = $('#tree').tree('getSelected');
+	$('#list').datagrid('load',{
+		pid: (node?node.id:''),
+		q: value
+	});
+}
+
+var url;
+function newItem(){
+	$('#dlg').dialog('setTitle','新增角色').dialog('open');
+	$('#myform').form('clear');
+	var node = $('#tree').tree('getSelected');
+	if (node){
+		$('#pid').combotree('setValue',node.id);
+	}
+	url = "@{save()}";
+}
+
+function saveItem(){
+	$('#myform').form('submit',{
+		url:url,
+		onSubmit:function(){return $(this).form('validate');},
+		success:function(){
+			$('#dlg').dialog('close');
+			$('#list').datagrid('reload');
+			$('#t-menus').tree('reload');
+		}
+	});
+}
+
+function editItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$('#dlg').dialog('setTitle','修改角色').dialog('open');
+		$('#myform').form('load',row);
+		url = '@{update()}?id=' + row.id;
+	} else {
+		$.messager.show({
+			title:'提示',
+			msg:'请先选择角色，再进行修改。'
+		});
+	}
+}
+
+function delItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$.messager.confirm("删除确认","是否真的删除该项记录？",function(r){
+			if(r){
+				var index = $('#list').datagrid('getRowIndex', row);
+				$.post("@{delete()}", {id:row.id}, function(){
+					$('#list').datagrid('deleteRow', index);
+					$('#t-menus').tree('reload');
+				});
+			}
+		});
+		return;
+	}
+}
+
+function formatFlag(val,row){  
+    if (val == 0){  
+        return '<span style="color:red;">锁定</span>';  
+    } else {  
+        return '激活';  
+    }  
+}
+
+function authorize(){
+	var row = $('#list').datagrid('getSelected');
+	if(row){
+		$('#dlg-auth').dialog('setTitle','角色授权').dialog('open');
+		var url = "@{Menus.getTree()}?rid=" + row.id;
+		$("#t-menu-auth").tree({url:url,checkbox:true});
+	}else{
+		$.messager.show({
+			title:'提示',
+			msg:'请先选择角色，再进行授权操作。'
+		});
+	}
+}
+
+function saveAuthorize(){
+
+	var nodes = getTreeValue($('#t-menu-auth'));
+    var row = $('#list').datagrid('getSelected');
+    if(row){
+    	$.post("@{saveAuthorize()}", {id:row.id,nodes:nodes,t:Math.random()}, function(){
+    		$.messager.alert('提示','给角色授权操作成功！');
+    		$('#dlg-auth').dialog('close');
+		});
+    }
+}
+</script>
+#{/set}
+
+<div id="p"></div>  
+
+<div region="west" iconCls="icon-ok" split="true" title="组织机构" style="width:250px;">
+<ul id="tree" url="@{Departs.getTree()}"></ul>
+</div>
+		
+<div region="center" title="角色信息表" style="padding:5px;">
+<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb">
+<thead>
+<tr>
+<th field="name" width="150">角色名称</th>
+<th field="departName" width="100">所属部门</th>
+<th field="flag" width="100" formatter="formatFlag">角色状态</th>
+<th field="note" width="250">备注</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<div id="tb">  
+    <span style="float: left;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:newItem();">新增</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="javascript:editItem();">修改</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="javascript:authorize();">授权</a> 
+    </span>
+    <span style="float:right">
+    <input type="text" size="20" id="keyword"/>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
+    </span> 
+</div> 
+
+<div id="dlg" class="easyui-dialog" style="width:320px;height:230px;" closed="true" modal="true" buttons="#dlg-buttons">
+<form id="myform" method="post">
+#{include 'Roles/_form.html'/}
+</form>
+<div id="dlg-buttons" style="text-align:center">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveItem()">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+</div>
+
+<div id="dlg-auth" icon="icon icon-role" class="easyui-dialog" style="width:350px;height:450px;" closed="true" modal="true" buttons="#dlg-buttons-auth">
+<ul id="t-menu-auth"></ul>
+<div id="dlg-buttons-auth" style="text-align:center">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveAuthorize()">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-auth').dialog('close')">取消</a>
+</div>
+</div>

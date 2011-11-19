@@ -1,0 +1,120 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+$(function(){
+	$('#tree').tree({
+		onClick:function(){
+			normalQuery();
+		}
+	});
+});
+
+function normalQuery(){
+	var value = $("#keyword").val();
+	var node = $('#tree').tree('getSelected');
+	$('#list').datagrid('load',{
+		pid: (node?node.id:''),
+		q: value
+	});
+}
+
+var url;
+var reload;
+function newItem(){
+	$('#dlg').dialog('setTitle','新增部门').dialog('open');
+	$('#myform').form('clear');
+	if(reload) $('#pid').combotree('reload');
+	var node = $('#tree').tree('getSelected');
+	if (node){
+		$('#pid').combotree('setValue',node.id);
+	}
+	url = "@{save()}";
+}
+
+function saveItem(){
+	$('#myform').form('submit',{
+		url:url,
+		onSubmit:function(){return $(this).form('validate');},
+		success:function(){
+			reload = true;
+			$('#dlg').dialog('close');
+			$('#list').datagrid('reload');
+			$('#t-menus').tree('reload');
+		}
+	});
+}
+
+function editItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$('#dlg').dialog('setTitle','修改部门').dialog('open');
+		$('#myform').form('load',row);
+		url = '@{update()}?id=' + row.id;
+	} else {
+		$.messager.show({
+			title:'提示',
+			msg:'请先选择部门，再进行修改。'
+		});
+	}
+}
+
+function delItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$.messager.confirm("删除确认","是否真的删除该项记录？",function(r){
+			if(r){
+				var index = $('#list').datagrid('getRowIndex', row);
+				$.post("@{delete()}", {id:row.id}, function(){
+					$('#list').datagrid('deleteRow', index);
+					$('#t-menus').tree('reload');
+				});
+			}
+		});
+		return;
+	}
+}
+</script>
+#{/set}
+
+
+<div region="west" iconCls="icon-ok" split="true" title="组织机构" style="width:250px;">
+<ul id="tree" url="@{getTree()}"></ul>
+</div>
+		
+<div region="center" title="部门信息表" style="padding:5px;" iconCls="icon-save">
+<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb">
+<thead>
+<tr>
+<th field="name" width="150">部门名称</th>
+<th field="url" width="100">业务对照码</th>
+<th field="sort" width="80">排序号</th>
+<th field="icon" width="250">备注</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<div id="tb">  
+    <span style="float: left;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:newItem();">新增</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="javascript:editItem();">修改</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a> 
+    </span>
+    <span style="float:right">
+    <input type="text" size="20" id="keyword"/>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
+    </span> 
+</div> 
+
+<div id="dlg" class="easyui-dialog" style="width:320px;height:230px;" closed="true" modal="true" buttons="#dlg-buttons">
+<form id="myform" method="post">
+#{include 'Departs/_form.html'/}
+</form>
+<div id="dlg-buttons" style="text-align:center">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveItem()">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+</div>

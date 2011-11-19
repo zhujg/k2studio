@@ -1,0 +1,7 @@
+#{extends 'dialog.html'/}
+<div region="north" border="false">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="saveAuthorize()">保存</a>
+</div>
+<div region="center" border="false">
+<ul id="t-menu-auth" url="@{Menus.getTree(params.id)}" class="easyui-tree" checkbox="true"></ul>
+</div>

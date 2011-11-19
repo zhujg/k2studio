@@ -1,0 +1,20 @@
+<div style="padding:10px">
+<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<td style="width:80px">角色名称：</td>
+		<td><input name="name" id="name" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">所属部门：</td>
+		<td><input name="pid" id="pid" style="width:200px" class="easyui-combotree" url="@{Departs.getTree()}" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">状态：</td>
+		<td><select name="flag"><option value="1" selected="selected">激活</option><option value="0">锁定</option></select></td>
+	</tr>
+	<tr>
+		<td style="width:80px">备注：</td>
+		<td><input name="note" id="note" style="width:200px"></input></td>
+	</tr>
+</table>
+</div>
