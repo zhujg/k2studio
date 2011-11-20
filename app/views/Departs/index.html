@@ -103,8 +103,7 @@ function delItem(){
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a> 
     </span>
     <span style="float:right">
-    <input type="text" size="20" id="keyword"/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a>
+    <input id="keyword" class="easyui-searchbox" prompt="按部门名称查询" searcher="normalQuery" style="width:200px"></input>
     <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
     </span> 
 </div> 

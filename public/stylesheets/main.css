@@ -19,6 +19,19 @@ a:hover{ color:Red; text-decoration:underline;}
 .easyui-accordion ul li div.selected{border:0px solid #99BBE8; background:#E0ECFF;cursor:default;}
 .easyui-accordion ul li div.selected a{color:#416AA3; font-weight:bold;}
 
-.form-table tr {height:25px;}
-
+.form-table tr{
+	height:25px;
+}
+.icon-find{
+	background:url('/public/images/find.png') no-repeat;
+}
+.icon-check{
+	background:url('/public/images/check.png') no-repeat;
+}
+.icon-open{
+	background:url('/public/images/open.png') no-repeat;
+}
+.icon-saves{
+	background:url('/public/images/filesaveas.png') no-repeat;
+}
 #tools{text-align:right;height:41px;line-height:40px;padding-right:5px;background-color: #e0edff;border-top:1px solid #a7b9cf}

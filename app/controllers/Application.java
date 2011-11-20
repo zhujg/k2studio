@@ -26,4 +26,6 @@ public class Application extends Controller {
     	return rows == 0 ? 10 : rows;
     }
 
+	public static void query(){ render(); }
+	
 }

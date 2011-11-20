@@ -1,0 +1,77 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+$(function(){
+	$('#tree').tree({
+		onClick:function(){
+			normalQuery();
+		}
+	});
+	
+	$('#dg-bills').billgrid({
+		createUrl:'@{create()}',
+		editUrl:'@{edit()}',
+		destroyUrl:'@{delete()}',
+		query:{
+			title:'查询员工',
+			form:'@{query()}',
+			width:350,
+			height:260,
+			callback:function(){$('#q').searchbox('setValue','');}
+		}
+	});
+});
+
+function normalQuery(value){
+	var node = $('#tree').tree('getSelected');
+	$('#dg-bills').datagrid('load',{
+		pid: (node?node.id:''),
+		q: value
+	});
+}
+
+#{config.format 'SEX' /}
+#{config.format 'ZZZT' /}
+</script>
+#{/set}
+
+
+<div region="west" iconCls="icon-ok" split="true" title="部门信息" style="width:250px;">
+<ul id="tree" url="@{Departs.getTree()}"></ul>
+</div>
+		
+<div region="center" title="员工信息表" style="padding:5px;" iconCls="icon-save">
+<table id="dg-bills" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb" pageSize="20" pageList="[20,30,40,50]">
+<thead>
+<tr>
+<th field="code" width="100">员工编号</th>
+<th field="name" width="150">姓名</th>
+<th field="sex" width="100" formatter="formatSEX">性别</th>
+<th field="jg" width="100">籍贯</th>
+<th field="birthday" width="150">出生日期</th>
+<th field="rzrq" width="150">入职日期</th>
+<th field="zw" width="150">职位</th>
+<th field="school" width="150">毕业学校</th>
+<th field="flag" width=80" formatter="formatZZZT">在职状态</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<div id="tb">  
+    <span style="float: left;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="$('#dg-bills').billgrid('create')">新增</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="$('#dg-bills').billgrid('edit')">修改</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="$('#dg-bills').billgrid('destroy')">删除</a> 
+    </span>
+    <span style="float:right">
+    <input id="keyword" class="easyui-searchbox" prompt="按员工编号|姓名" searcher="normalQuery" style="width:200px"></input>
+    <a href="#" class="easyui-linkbutton" plain="true" onclick="$('#dg-bills').billgrid('query')">高级查询</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#dg-bills').billgrid('reload')">刷新</a>
+    </span> 
+</div> 
+
+<div id="dlg-bill" class="easyui-dialog" icon="icon icon-users" title="员工资料" style="width:600px;height:395px;position:relative" closed="true">
+</div>

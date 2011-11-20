@@ -85,3 +85,35 @@ function getTreeValue($obj){
     else nodes = cnodes;
     return nodes;
 }
+
+/**
+ * 提交单据表单
+ * @param submitType 保存类型：0保存，1保存并新建
+ * @return
+ */
+function submitBill(submitType){
+	$('#fm-bill').form('submit', {
+		onSubmit:function(){
+			var isValid = $(this).form('validate');
+			if (isValid){
+				$.messager.progress();
+			}
+			return isValid;
+		},
+		success:function(result){
+			$.messager.progress('close');
+			var result = eval('(' + result + ')');
+			if (result.success){
+				$('#dg-bills').datagrid('reload');
+				var createUrl = $('#dg-bills').datagrid('options').createUrl;
+				var editUrl = $('#dg-bills').datagrid('options').editUrl + '?id=' + result.billId;
+				$('#dlg-bill').dialog('refresh', (submitType==2 ? createUrl : editUrl));
+			} else {
+				$.messager.show({
+					title:'提示',
+					msg:result.msg
+				});
+			}
+		}
+	});
+}

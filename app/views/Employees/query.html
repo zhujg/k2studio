@@ -1,0 +1,29 @@
+#{extends 'dialog.html'/}
+<div style="padding:10px">
+	<table cellpadding="0" cellspacing="2">
+		<tr>
+			<td style="width:80px">员工编号：</td>
+			<td><input name="code" class="query" style="width:200px"></input></td>
+		</tr>
+		<tr>
+			<td style="width:80px">姓名：</td>
+			<td><input name="name" class="query" style="width:200px"></input></td>
+		</tr>
+		<tr>
+			<td>性别：</td>
+			<td><input name="sex" class="query easyui-combobox" style="width:200px" url="@{Dictionaries.getCombobox('SEX')}" valueField='id' textField='text'></input></td>
+		</tr>
+		<tr>	
+			<td>籍贯：</td>
+			<td><input name="jg" class="query" style="width:200px"></input></td>
+		</tr>
+		<tr>
+			<td>所属部门：</td>
+			<td><input name="dep" style="width:200px" class="query easyui-combotree" url="@{Departs.getTree()}" ></input></td>
+		</tr>
+		<tr>	
+			<td>在职状态：</td>
+			<td><input name="flag" id="flag" style="width:200px" class="query easyui-combobox" url="@{Dictionaries.getCombobox('ZZZT')}" valueField='id' textField='text'></input></td>
+		</tr>
+	</table>
+</div>

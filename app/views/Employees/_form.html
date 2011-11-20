@@ -1,0 +1,78 @@
+<div region="center" border="false">
+<div style="padding:10px">
+<table cellpadding="0" cellspacing="0" class="form-table" width="100%">
+	<tr>
+		<td style="width:80px">员工编号：</td>
+		<td><input name="emp.code" id="code" style="width:150px" class="easyui-validatebox" required="true" value="${emp?.code}"></input></td>
+		<td style="width:80px">员工姓名：</td>
+		<td><input name="emp.name" id="name" style="width:150px" class="easyui-validatebox" required="true" value="${emp?.name}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">性别：</td>
+		<td><input name="emp.sex" id="sex" style="width:150px" class="easyui-combobox" url="@{Dictionaries.getCombobox('SEX')}" valueField='id' textField='text' value="${emp?.sex}"></input></td>
+		<td style="width:80px">出生日期：</td>
+		<td><input name="emp.birthday" id="birthday" style="width:150px" class="easyui-datebox" value="${emp?.birthday}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">身份证号：</td>
+		<td><input name="emp.card" id="card" style="width:150px" value="${emp?.card}"></input></td>
+		<td style="width:80px">婚姻状况：</td>
+		<td><input name="emp.marry" id="marry" style="width:150px" value="${emp?.marry}" class="easyui-combobox" url="@{Dictionaries.getCombobox('HYZK')}" valueField=text textField='text'></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">民族：</td>
+		<td><input name="emp.mz" id="mz" style="width:150px" value="${emp?.mz}"></input></td>
+		<td style="width:80px">籍贯：</td>
+		<td><input name="emp.jg" id="jg" style="width:150px" value="${emp?.jg}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">政治面貌：</td>
+		<td><input name="emp.zzmm" id="zzmm" style="width:150px" value="${emp?.zzmm}"></input></td>
+		<td style="width:80px">电子信箱：</td>
+		<td><input name="emp.email" id="email" style="width:150px" value="${emp?.email}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">联系电话：</td>
+		<td colspan="3"><input name="emp.tel" id="tel" style="width:150px" value="${emp?.tel}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">联系地址：</td>
+		<td colspan="3"><input name="emp.addr" id="addr" style="width:432px" value="${emp?.addr}"></input></td>
+	</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="form-table" width="100%">
+	<tr>
+		<td style="width:80px">所属部门：</td>
+		<td colspan="3"><input name="emp.dep" id="dep" value="${emp?.dep}" style="width:200px" class="easyui-combotree" url="@{Departs.getTree()}" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">职位：</td>
+		<td><input name="emp.zw" id="zw" style="width:150px" class="easyui-validatebox" value="${emp?.zw}"></input></td>
+		<td style="width:80px">聘用形式：</td>
+		<td><input name="emp.pyxs" id="pyxs" style="width:150px" value="${emp?.pyxs}" class="easyui-combobox" url="@{Dictionaries.getCombobox('PYXS')}" valueField=text textField='text'></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">最高学历：</td>
+		<td><input name="emp.xl" id="xl" style="width:150px" value="${emp?.xl}"></input></td>
+		<td style="width:80px">所学专业：</td>
+		<td><input name="emp.zy" id="zy" style="width:150px" value="${emp?.zy}"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">毕业学校：</td>
+		<td><input name="emp.school" id="school" style="width:150px" value="${emp?.school}"></input></td>
+		<td style="width:80px">入职日期：</td>
+		<td><input name="emp.rzrq" id="rzrq" style="width:150px" value="${emp?.rzrq}" class="easyui-datebox"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">在职状态：</td>
+		<td  colspan="3"><input name="emp.flag" id="flag" style="width:150px" value="${emp?.flag}" class="easyui-combobox" url="@{Dictionaries.getCombobox('ZZZT')}" valueField='id' textField='text'></input></td>
+	</tr>
+</table>
+</div>
+</div>
+
+<div region="south" border="false" style="text-align:center" id="tools">
+<input type="hidden" name="emp.id" value="${emp?.id}"/>
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="submitBill(1)">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-bill').dialog('close')">关闭</a>
+</div>
