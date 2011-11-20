@@ -10,8 +10,7 @@ $(function(){
 	});
 });
 
-function normalQuery(){
-	var value = $("#keyword").val();
+function normalQuery(value){
 	var node = $('#t-menus').tree('getSelected');
 	$('#list').datagrid('load',{
 		pid: (node?node.id:''),
@@ -83,7 +82,7 @@ function delItem(){
 </div>
 		
 <div region="center" title="菜单信息表" style="padding:5px;">
-<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb">
+<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb" pageSize="20" pageList="[20,30,40,50]">
 <thead>
 <tr>
 <th field="name" width="150">菜单名称</th>
@@ -103,8 +102,8 @@ function delItem(){
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a> 
     </span>
     <span style="float:right">
-    <input type="text" size="20" id="keyword"/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a> 
+    <input id="keyword" class="easyui-searchbox" prompt="按菜单名称查询" searcher="normalQuery" style="width:200px"></input>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
     </span> 
 </div> 
 

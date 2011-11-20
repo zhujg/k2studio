@@ -1,0 +1,14 @@
+#{extends 'layout.html'/}
+<script>
+$(function(){
+	$('#tt').propertygrid({  
+	    url:'@{getItems()}',
+	    columns:[[{field:"name",title:"名称",width:100,sortable:true},{field:"value",title:"值",width:100,resizable:false}]]
+	}); 
+})
+</script>
+<div region="west" split="true" title="服务器信息" style="width:350px;">
+<table id="tt" border="false"></table>
+</div>
+
+<div region="center" title="JVM内存监控视图" style="padding:5px;"></div>

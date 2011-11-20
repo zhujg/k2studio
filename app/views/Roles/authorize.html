@@ -1,7 +1,23 @@
 #{extends 'dialog.html'/}
-<div region="north" border="false">
-<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="saveAuthorize()">保存</a>
-</div>
+
+<script>
+function saveAuthorize(){
+
+	var nodes = getTreeValue($('#t-menu-auth'));
+    var row = $('#list').datagrid('getSelected');
+    if(row){
+    	$.post("@{saveAuthorize()}", {id:row.id,nodes:nodes,t:Math.random()}, function(){
+    		$.messager.alert('提示','给角色授权操作成功！');
+    		$('#dlg-auth').dialog('close');
+		});
+    }
+}
+</script>
 <div region="center" border="false">
-<ul id="t-menu-auth" url="@{Menus.getTree(params.id)}" class="easyui-tree" checkbox="true"></ul>
+<ul id="t-menu-auth" url="@{Menus.getTree(params.rid)}" class="easyui-tree" checkbox="true"></ul>
+</div>
+
+<div region="south" border="false" style="text-align:center" id="tools">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveAuthorize()">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-auth').dialog('close')">取消</a>
 </div>

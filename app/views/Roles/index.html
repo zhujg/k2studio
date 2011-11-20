@@ -10,8 +10,7 @@ $(function(){
 	});
 });
 
-function normalQuery(){
-	var value = $("#keyword").val();
+function normalQuery(value){
 	var node = $('#tree').tree('getSelected');
 	$('#list').datagrid('load',{
 		pid: (node?node.id:''),
@@ -83,9 +82,7 @@ function formatFlag(val,row){
 function authorize(){
 	var row = $('#list').datagrid('getSelected');
 	if(row){
-		$('#dlg-auth').dialog('setTitle','角色授权').dialog('open');
-		var url = "@{Menus.getTree()}?rid=" + row.id;
-		$("#t-menu-auth").tree({url:url,checkbox:true});
+		$('#dlg-auth').dialog('setTitle','角色授权').dialog('open').dialog("refresh","@{authorize()}?rid="+row.id);
 	}else{
 		$.messager.show({
 			title:'提示',
@@ -94,17 +91,6 @@ function authorize(){
 	}
 }
 
-function saveAuthorize(){
-
-	var nodes = getTreeValue($('#t-menu-auth'));
-    var row = $('#list').datagrid('getSelected');
-    if(row){
-    	$.post("@{saveAuthorize()}", {id:row.id,nodes:nodes,t:Math.random()}, function(){
-    		$.messager.alert('提示','给角色授权操作成功！');
-    		$('#dlg-auth').dialog('close');
-		});
-    }
-}
 </script>
 #{/set}
 
@@ -136,8 +122,7 @@ function saveAuthorize(){
     <a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="javascript:authorize();">授权</a> 
     </span>
     <span style="float:right">
-    <input type="text" size="20" id="keyword"/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a>
+    <input id="keyword" class="easyui-searchbox" prompt="按角色名称查询" searcher="normalQuery" style="width:200px"></input>
     <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
     </span> 
 </div> 
@@ -152,10 +137,5 @@ function saveAuthorize(){
 </div>
 </div>
 
-<div id="dlg-auth" icon="icon icon-role" class="easyui-dialog" style="width:350px;height:450px;" closed="true" modal="true" buttons="#dlg-buttons-auth">
-<ul id="t-menu-auth"></ul>
-<div id="dlg-buttons-auth" style="text-align:center">
-<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveAuthorize()">保存</a>
-<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-auth').dialog('close')">取消</a>
-</div>
+<div id="dlg-auth" icon="icon icon-role" class="easyui-dialog" style="width:350px;height:450px;" closed="true" modal="true">
 </div>

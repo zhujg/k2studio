@@ -1,0 +1,116 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+
+function normalQuery(value){
+	$('#list').datagrid('load',{
+		q: value
+	});
+}
+
+var url;
+var reload;
+function newItem(){
+	$('#dlg').dialog('setTitle','新增字典').dialog('open');
+	$('#myform').form('clear');
+	url = "@{save()}";
+}
+
+function saveItem(){
+	$('#myform').form('submit',{
+		url:url,
+		onSubmit:function(){return $(this).form('validate');},
+		success:function(){
+			reload = true;
+			$('#dlg').dialog('close');
+			$('#list').datagrid('reload');
+		}
+	});
+}
+
+function editItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$('#dlg').dialog('setTitle','修改字典').dialog('open');
+		$('#myform').form('load',row);
+		url = '@{update()}?id=' + row.id;
+	} else {
+		$.messager.show({
+			title:'提示',
+			msg:'请先选择字典，再进行修改。'
+		});
+	}
+}
+
+function delItem(){
+	var row = $('#list').datagrid('getSelected');
+	if (row){
+		$.messager.confirm("删除确认","是否真的删除该项记录？",function(r){
+			if(r){
+				var index = $('#list').datagrid('getRowIndex', row);
+				$.post("@{delete()}", {id:row.id}, function(){
+					$('#list').datagrid('deleteRow', index);
+				});
+			}
+		});
+		return;
+	}
+}
+
+function init(){
+	$.messager.confirm("请确认","要对字典表进行内存同步操作吗？",function(r){
+		if(r){
+			$('#list').datagrid("loading");
+			$.getJSON("@{init()}",function(data){
+				$('#list').datagrid("loaded");
+			});
+		}
+	})
+}
+
+#{config.format 'QYBZ'/}
+#{config.format 'EDITMODE'/}
+</script>
+#{/set}
+
+		
+<div region="center" title="字典数据列表" style="padding:5px;">
+<table id="list" class="easyui-datagrid" fit="true" url="@{getItems()}" rownumbers="true" pagination="true" singleSelect="true" toolbar="#tb" pageSize="20" pageList="[20,30,40,50]">
+<thead>
+<tr>
+<th field="field" width="120">对照字段</th>
+<th field="name" width="150">字段名</th>
+<th field="code" width="80">代码</th>
+<th field="codedesc" width="80">代码描述</th>
+<th field="enable" width="80" formatter="formatQYBZ">启用状态</th>
+<th field="editmode" width="80" formatter="formatEDITMODE">编辑模式</th>
+<th field="note" width="200">备注</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<div id="tb">  
+    <span style="float: left;">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:newItem();">新增</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="javascript:editItem();">修改</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:delItem();">删除</a> 
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="init();">同步</a> 提示:维护字典后必须执行内存同步
+    </span>
+    <span style="float:right">
+    <input id="keyword" class="easyui-searchbox" prompt="按字段|字段名|代码描述" searcher="normalQuery" style="width:200px"></input>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
+    </span> 
+</div> 
+
+<div id="dlg" class="easyui-dialog" style="width:350px;height:280px;" closed="true" modal="true" buttons="#dlg-buttons">
+<form id="myform" method="post">
+#{include 'Dictionaries/_form.html'/}
+</form>
+<div id="dlg-buttons" style="text-align:center">
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveItem()">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+</div>

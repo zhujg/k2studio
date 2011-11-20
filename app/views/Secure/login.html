@@ -3,15 +3,12 @@
 <title>#{config.show "SYS_TITLE"/}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/main.css'}">
-<link rel="stylesheet" type="text/css" href="@{'/public/themes/default/easyui.css'}">
+<link rel="stylesheet" type="text/css" href="/public/themes/#{config.show 'SYS_DEFAULT_THEME'/}/easyui.css">
 <link rel="stylesheet" type="text/css" href="@{'/public/themes/icon.css'}">
 <script type="text/javascript" src="@{'/public/javascripts/jquery-1.6.min.js'}"></script>
 <script type="text/javascript" src="@{'/public/javascripts/jquery.easyui.min.js'}"></script>
 <script type="text/javascript" src="@{'/public/javascripts/locale/easyui-lang-zh_CN.js'}"></script>
 <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-<style>
-#tools{text-align:right;height:41px;line-height:40px;padding-right:5px;background-color: #e0edff;border-top:1px solid #a7b9cf}
-</style>
 <script>
 $(function(){
 	$('#win').window({  

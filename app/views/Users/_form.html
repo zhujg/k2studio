@@ -14,15 +14,19 @@
 	</tr>
 	<tr>
 		<td style="width:80px">登录密码：</td>
-		<td><input type="password" name="password" id="password" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+		<td><input type="password" name="password" id="password" style="width:200px" class="easyui-validatebox input" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">确认密码：</td>
+		<td><input type="password" class="easyui-validatebox e-input" style="width:200px" id="confirmPassword" name="confirmPassword" required="true" validType="confirm['#password']"></input></td>
 	</tr>
 	<tr>
 		<td style="width:80px">状态：</td>
-		<td><select name="flag"><option value="1" selected="selected">激活</option><option value="0">锁定</option></select></td>
+		<td><input name="flag" id="flag" style="width:200px" class="easyui-combobox" url="@{Dictionaries.getCombobox('LOCKED')}" valueField='id' textField='text'></input></td>
 	</tr>
 	<tr>
 		<td style="width:80px">性别：</td>
-		<td><select name="sex"><option value="1" selected="selected">男</option><option value="0">女</option></select></td>
+		<td><input name="sex" id="sex" style="width:200px" class="easyui-combobox" url="@{Dictionaries.getCombobox('SEX')}" valueField='id' textField='text'></input></td>
 	</tr>
 	<tr>
 		<td style="width:80px">备注：</td>

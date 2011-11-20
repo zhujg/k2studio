@@ -57,6 +57,10 @@ public class Users extends Application{
 		renderJSON(user);
 	}
 
+	public static void authorize(){
+		render();
+	}
+	
 	public static void saveAuthorize(Long id,String role,String menu){
 		User user = User.findById(id);
 		if(user != null) {

@@ -69,6 +69,10 @@ public class Roles extends Application{
 		renderJSON(role);
 	}
 	
+	public static void authorize(){
+		render();
+	}
+	
 	public static void saveAuthorize(Long id,String nodes){
 		Role role = Role.findById(id);
 		if(role != null) role.nodes = nodes;

@@ -1,0 +1,32 @@
+<div style="padding:10px">
+<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<td style="width:80px">对照字段：</td>
+		<td><input name="field" id="field" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">字段名：</td>
+		<td><input name="name" id="name" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">代码：</td>
+		<td><input name="code" id="code" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">代码描述：</td>
+		<td><input name="codedesc" id="codedesc" style="width:200px" class="easyui-validatebox" required="true"></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">启用状态：</td>
+		<td><input name="enable" id="enable" style="width:200px" class="easyui-combobox" url="@{Dictionaries.getCombobox('QYBZ')}" valueField='id' textField='text'></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">编辑模式：</td>
+		<td><input name="editmode" id="editmode" style="width:200px" class="easyui-combobox" url="@{Dictionaries.getCombobox('EDITMODE')}" valueField='id' textField='text'></input></td>
+	</tr>
+	<tr>
+		<td style="width:80px">备注：</td>
+		<td><input name="note" id="note" style="width:200px"></input></td>
+	</tr>
+</table>
+</div>

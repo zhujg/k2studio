@@ -10,6 +10,7 @@ public class Bootstrap extends Job{
 	@Override
 	public void doJob() throws Exception {
 		Configure.init();
+		Configure.initDictionary();
 	}
 	
 }

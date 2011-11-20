@@ -8,10 +8,19 @@ $(function(){
 			normalQuery();
 		}
 	});
+	
+	// 扩展验证
+	$.extend($.fn.validatebox.defaults.rules, {
+		confirm:{
+			validator: function(value,param){
+				return value == $(param[0]).val();
+			},
+			message:'密码确认不对'
+		}
+	});
 });
 
-function normalQuery(){
-	var value = $("#keyword").val();
+function normalQuery(value){
 	var node = $('#tree').tree('getSelected');
 	$('#list').datagrid('load',{
 		pid: (node?node.id:''),
@@ -47,6 +56,7 @@ function editItem(){
 	if (row){
 		$('#dlg').dialog('setTitle','修改人员').dialog('open');
 		$('#myform').form('load',row);
+		$('#confirmPassword').val(row.password);
 		url = '@{update()}?id=' + row.id;
 	} else {
 		$.messager.show({
@@ -80,23 +90,11 @@ function formatFlag(val,row){
     }  
 }
 
-function formatSex(val,row){  
-    if (val == 0){  
-        return '女';  
-    } else {  
-        return '男';  
-    }  
-}
-
 function authorize(){
 	var row = $('#list').datagrid('getSelected');
 	if(row){
 		$('#tabs').tabs("select","选择角色");
-		$('#dlg-auth').dialog('setTitle','人员授权').dialog('open');
-		var url = "@{Menus.getTree()}?uid="+row.id;
-		$("#t-menu-auth").tree({url:url,checkbox:true});
-		url = "@{Roles.getTree()}?uid="+row.id;
-		$("#t-role-auth").tree({url:url,checkbox:true});
+		$('#dlg-auth').dialog('setTitle','人员授权').dialog('open').dialog("refresh","@{authorize()}?uid="+row.id);
 	}else{
 		$.messager.show({
 			title:'提示',
@@ -105,18 +103,7 @@ function authorize(){
 	}
 }
 
-function saveAuthorize(){
-	var menu = getTreeValue($('#t-menu-auth'));
-	var role = getTreeValue($('#t-role-auth'));
-	var row = $('#list').datagrid('getSelected');
-		if(row){
-	    	$.post("@{saveAuthorize()}", {id:row.id,role:role,menu:menu,t:Math.random()}, function(){
-	    		$.messager.alert('提示','给人员授权操作成功！');
-	    		$('#dlg-auth').dialog('close');
-			});
-	}
-}
-
+#{config.format 'SEX'/}
 </script>
 #{/set}
 
@@ -133,7 +120,7 @@ function saveAuthorize(){
 <th field="truename" width="120">姓名</th>
 <th field="username" width="120">登录帐户</th>
 <th field="departName" width="100">所属部门</th>
-<th field="sex" width="100" formatter="formatSex">性别</th>
+<th field="sex" width="100" formatter="formatSEX">性别</th>
 <th field="flag" width="100" formatter="formatFlag">状态</th>
 <th field="note" width="250">备注</th>
 </tr>
@@ -150,13 +137,12 @@ function saveAuthorize(){
     <a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="javascript:authorize();">授权</a> 
     </span>
     <span style="float:right">
-    <input type="text" size="20" id="keyword"/>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a>
+    <input id="keyword" class="easyui-searchbox" prompt="按姓名|登录帐户查询" searcher="normalQuery" style="width:200px"></input>
     <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="$('#list').datagrid('reload')">刷新</a>
     </span> 
 </div> 
 
-<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;" closed="true" modal="true" buttons="#dlg-buttons">
+<div id="dlg" class="easyui-dialog" style="width:400px;height:310px;" closed="true" modal="true" buttons="#dlg-buttons" icon="icon icon-users">
 <form id="myform" method="post">
 #{include 'Users/_form.html'/}
 </form>
@@ -165,14 +151,5 @@ function saveAuthorize(){
 <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
 </div>
 </div>
-
-<div id="dlg-auth" class="easyui-dialog" icon="icon icon-users" style="width:350px;height:450px;" closed="true" modal="true" buttons="#dlg-buttons-auth">
-<div id="tabs" class="easyui-tabs" border="false">
-<div title="选择角色"><ul id="t-role-auth"></ul></div>
-<div title="选择菜单"><ul id="t-menu-auth"></ul></div>
-</div>
-<div id="dlg-buttons-auth" style="text-align:center">
-<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="saveAuthorize()">保存</a>
-<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-auth').dialog('close')">取消</a>
-</div>
+<div id="dlg-auth" icon="icon icon-users" class="easyui-dialog" style="width:350px;height:450px;" closed="true" modal="true">
 </div>

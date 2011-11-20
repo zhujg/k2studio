@@ -5,10 +5,10 @@
 # Home page
 
 
-GET     /                                       Application.index
+GET    /                                        Application.index
 GET	   /login									Secure.login
-GET	   /llogout								Secure.logout
-POST  /login									Secure.authenticate
+GET	   /logout									Secure.logout
+POST   /login									Secure.authenticate
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

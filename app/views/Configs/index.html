@@ -12,8 +12,7 @@
 		});
 	});
 	
-	function normalQuery(){
-		var value = $("#keyword").val();
+	function normalQuery(value){
 		edg.edatagrid('reload',{
 			q: value
 		});
@@ -52,8 +51,7 @@
 	<a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="init();">同步</a> 提示:维护参数表后必须执行内存同步
 </span>
 <span style="float:right;">
-<input type="text" size="20" id="keyword"/>
-<a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="javascript:normalQuery();">查询</a> 
+<input id="keyword" class="easyui-searchbox" prompt="按参数键名 |参数键值查询" searcher="normalQuery" style="width:200px"></input>
 <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="edg.edatagrid('reload')">刷新</a>
 </span>
 </div>

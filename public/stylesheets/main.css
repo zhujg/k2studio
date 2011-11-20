@@ -20,3 +20,5 @@ a:hover{ color:Red; text-decoration:underline;}
 .easyui-accordion ul li div.selected a{color:#416AA3; font-weight:bold;}
 
 .form-table tr {height:25px;}
+
+#tools{text-align:right;height:41px;line-height:40px;padding-right:5px;background-color: #e0edff;border-top:1px solid #a7b9cf}
