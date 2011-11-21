@@ -1,0 +1,45 @@
+#{extends 'layout.html'/}
+
+#{set 'moreScripts'}
+<script>
+function filterTable(){
+	var filter = $("#filter").attr("checked");
+	var name = $("#name").val();
+	$.getJSON("@{filterTable()}",{fitler:filter,name:name,t:Math.random()},function(data){
+		$("#tlist").empty();
+		$(data).each(function(i,row){
+			$("#tlist").append("<option value='"+row+"'>"+row+"</option>"); 		
+		});
+	});
+}
+
+</script>
+#{/set}
+<div region="center" fit="true" split="true" title="功能菜单" style="width:250px;">
+<table border="0" width="100%" height="90%">
+<tr><td colspan="4" height="20px"></td></tr>
+<tr>
+<td width="200">
+<input type="checkbox" id="filter" name="filter" checked="true"/>
+<input type="text" style="width:120px;" name="name" id="name"/>
+<input type="button" value="过滤" onclick="filterTable();"/>
+<select multiple="multiple" style="width:200px;height: 100%" id="tlist"></select>
+</td>
+<td width="50">
+<input type="button" value=" -> "/><br/>
+<input type="button" value=" <- "/>
+</td>
+<td width="220">
+	<table height="100%" border="0">
+	<tr><td valign="top">主表<br/><select multiple="multiple" style="width:200px;height: 300px" id="tlist"></select></td></tr>
+	<tr><td valign="top">子表<br/><select multiple="multiple" style="width:200px;height: 300px" id="tlist"></select></td></tr>
+	</table>
+</td>
+<td align="left" valign="top">
+<table>
+<tr><td><input type="text" name="name"/> <input type="button" value="查询"/></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</div>

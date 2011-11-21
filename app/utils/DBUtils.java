@@ -30,42 +30,40 @@ public class DBUtils {
 		return 0l;
 	}
 	
-	
-	public static List<Map<String,Object>> getTables2Tree(){
+	public static List<String> getTables(){
 		List<String> tables = new ArrayList<String>();
-		List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
 		try {
 			Connection conn = DB.getConnection();
 			DatabaseMetaData dbmd = conn.getMetaData();
 			String[] types = { "TABLE" };
 			ResultSet rs = dbmd.getTables(null, null, "%", types);
-			String schema = "";
 			while (rs.next()) {
 				String name = rs.getString(3);
-				schema = rs.getString(1);
 				tables.add(name);
 			}
-			
-			Map<String,Object> root = new HashMap<String,Object>();
-			root.put("id", 0);
-			root.put("text",schema);
-			nodes.add(root);
-			
-			List<Map<String,Object>> parent = new ArrayList<Map<String,Object>>();
-			for(int i = 0;i<tables.size();i++){
-				String name = tables.get(i);
-				Map<String,Object> node = new HashMap<String,Object>();
-				node.put("id", 0);
-				node.put("text", name);
-				parent.add(node);
-			}
-			
-			root.put("children", parent.toArray(new Object[parent.size()]));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+		return tables;
+	}
+	
+	
+	public static List<Map<String,Object>> getTables2Tree(){
+		List<String> tables = getTables();
+		List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+		Map<String,Object> root = new HashMap<String,Object>();
+		root.put("id", 0);
+		root.put("text","数据表结构");
+		nodes.add(root);
+		List<Map<String,Object>> parent = new ArrayList<Map<String,Object>>();
+		for(int i = 0;i<tables.size();i++){
+			String name = tables.get(i);
+			Map<String,Object> node = new HashMap<String,Object>();
+			node.put("id", 0);
+			node.put("text", name);
+			parent.add(node);
+		}
+		root.put("children", parent.toArray(new Object[parent.size()]));
 		return nodes;
 	}
 	

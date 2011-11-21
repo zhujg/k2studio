@@ -33,6 +33,7 @@ function normalQuery(value){
 
 #{config.format 'SEX' /}
 #{config.format 'ZZZT' /}
+
 </script>
 #{/set}
 
@@ -53,7 +54,9 @@ function normalQuery(value){
 <th field="rzrq" width="150">入职日期</th>
 <th field="zw" width="150">职位</th>
 <th field="school" width="150">毕业学校</th>
-<th field="flag" width=80" formatter="formatZZZT">在职状态</th>
+
+
+
 </tr>
 </thead>
 </table>
@@ -73,5 +76,5 @@ function normalQuery(value){
     </span> 
 </div> 
 
-<div id="dlg-bill" class="easyui-dialog" icon="icon icon-users" title="员工资料" style="width:600px;height:395px;position:relative" closed="true">
+<div id="dlg-bill" class="easyui-dialog" icon="icon icon-users" title="员工资料" style="width:600px;height:395px;position:relative" closed="true" modal="true">
 </div>

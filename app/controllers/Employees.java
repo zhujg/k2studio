@@ -16,8 +16,8 @@ public class Employees extends Application{
 	public static void getItems(Long pid,String q){
 		List<Object> args = new ArrayList<Object>();
 		String sql = "1=1 ";
-		if(pid != null){
-			sql = sql + "and pid = ? ";
+		if(pid != null && pid > 0){
+			sql = sql + "and dep = ? ";
 			args.add(pid);
 		}
 		if(!MyUtils.isEmpty(q)){
