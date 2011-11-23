@@ -1,0 +1,60 @@
+#{extends 'layout.html'/}
+#{set 'moreScripts'}
+#{if bth_head}
+<script type="text/javascript">
+	var edg;
+	$(function(){
+		edg = $('#list').edatagrid({
+			url:'@{develop.BillTemplateBs.getItems(bth_head.id)}',
+			saveUrl:'@{develop.BillTemplateBs.save(bth_head.id)}',
+			updateUrl:'@{develop.BillTemplateBs.update()}',
+			destroyUrl:'@{develop.BillTemplateBs.delete()}',
+			onClickCell:function(){showAdvanced();}
+		});
+		
+		$('#prop').propertygrid({
+			url:'@{develop.BillTemplateBs.getField()}',
+		    columns:[[{field:"name",title:"属性",width:100},{field:"value",title:"值",width:100}]]
+		});
+	});
+	function showAdvanced(){
+		var row = edg.edatagrid("getSelected");
+		$('#prop').propertygrid("load",{
+			id:row.id
+		});
+	}
+</script>
+#{/if}
+#{/set}
+
+<div region="center" title="单据模板初始化" style="padding:5px;">
+#{if bth_head}
+
+<table id="list" fit="true" singleSelect="true" toolbar="#tb">
+<thead>
+<tr>
+<th field="field" width="120" editor="text">字段名</th>
+<th field="showname" width="120" editor="text">显示名称</th>
+<th field="width" width="80" editor="text">控件宽度</th>
+<th field="newlineflag" width="80" editor="{type:'checkbox',options:{value:1}}">布局到下一行</th>
+<th field="inputlength" width="80" editor="text">入录长度</th>
+<th field="listflag" width="80" editor="{type:'checkbox',options:{value:1}}">列表显示</th>
+<th field="showflag" width="80" editor="{type:'checkbox',options:{value:1}}">卡片显示</th>
+<th field="editflag" width="80" editor="{type:'checkbox',options:{value:1}}">是否编辑</th>
+</tr>
+</thead>
+</table>
+
+#{/if}
+</div>
+<div region="east" style="width:250px;" title="高级属性" split="true">
+<table id="prop" border="false"></table>
+</div>
+
+<div id="tb"> 
+<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="edg.edatagrid('addRow')">返回</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="edg.edatagrid('addRow')">新增</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="edg.edatagrid('saveRow')">保存</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="edg.edatagrid('cancelRow')">取消</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="edg.edatagrid('destroyRow')">删除</a>
+</div>

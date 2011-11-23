@@ -26,6 +26,7 @@
 					$(this).edatagrid('editRow', index);
 					focusEditor(field);
 				}
+				if (opts.onClickCell) opts.onClickCell.call(target, index, field);
 			},
 			onAfterEdit: function(index, row){
 				opts.editIndex = undefined;

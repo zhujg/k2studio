@@ -1,13 +1,13 @@
 package models;
 
-public class Property {
+public class Propertygrid {
 
 	public String name;
-	public String value;
+	public Object value;
 	public String group;
 	public String editor;
 	
-	public Property(String name,String value) {
+	public Propertygrid(String name,Object value) {
 		this.name = name;
 		this.value = value;
 	}

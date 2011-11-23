@@ -10,7 +10,7 @@ import play.templates.FastTags;
 import play.templates.JavaExtensions;
 import utils.Page;
 
-import models.Property;
+import models.Propertygrid;
 import models.Role;
 
 public class ServerInfo extends Application{
@@ -21,26 +21,26 @@ public class ServerInfo extends Application{
 	
 	public static void getItems(){
 		JavaInfo javaInfo = new JavaInfo();
-		List<Property> rows = new ArrayList<Property>();
-		Property property = new Property("a.操作系统",javaInfo.osname);
+		List<Propertygrid> rows = new ArrayList<Propertygrid>();
+		Propertygrid property = new Propertygrid("a.操作系统",javaInfo.osname);
 		rows.add(property);
-		property = new Property("b.主机域名",request.domain);
+		property = new Propertygrid("b.主机域名",request.domain);
 		rows.add(property);
-		property = new Property("c.监听端口",request.port.toString());
+		property = new Propertygrid("c.监听端口",request.port.toString());
 		rows.add(property);
-		property = new Property("d.Web根路径",Play.applicationPath.getAbsolutePath());
+		property = new Propertygrid("d.Web根路径",Play.applicationPath.getAbsolutePath());
 		rows.add(property);
-		property = new Property("e.Play版本",Play.version);
+		property = new Propertygrid("e.Play版本",Play.version);
 		rows.add(property);
-		property = new Property("f.JVM版本",javaInfo.javaversion);
+		property = new Propertygrid("f.JVM版本",javaInfo.javaversion);
 		rows.add(property);
-		property = new Property("g.JVM提供商",javaInfo.javavendor);
+		property = new Propertygrid("g.JVM提供商",javaInfo.javavendor);
 		rows.add(property);
-		property = new Property("h.JVM安装路径",javaInfo.javahome);
+		property = new Propertygrid("h.JVM安装路径",javaInfo.javahome);
 		rows.add(property);
-		property = new Property("i.JVM可用最大内存",JavaExtensions.formatSize(Long.parseLong(javaInfo.vmmax)));
+		property = new Propertygrid("i.JVM可用最大内存",JavaExtensions.formatSize(Long.parseLong(javaInfo.vmmax)));
 		rows.add(property);
-		Page<Property> page = new Page<Property>(9,rows);
+		Page<Propertygrid> page = new Page<Propertygrid>(9,rows);
 		renderJSON(page.get());
 	}
 }
